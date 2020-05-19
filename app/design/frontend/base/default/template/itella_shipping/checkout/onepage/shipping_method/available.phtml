@@ -1,0 +1,177 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magento.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magento.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2006-2017 X.commerce, Inc. and affiliates (http://www.magento.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this Mage_Checkout_Block_Onepage_Shipping_Method_Available */ ?>
+<?php $_shippingRateGroups = $this->getShippingRates(); ?>
+<?php if (!$_shippingRateGroups): ?>
+    <p><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></p>
+<?php else: ?>
+    <dl class="sp-methods">
+    <?php $shippingCodePrice = array(); ?>
+    <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
+        <dt><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
+        <dd>
+            <ul>
+            <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
+                <?php $shippingCodePrice[] = "'".$_rate->getCode()."':".(float)$_rate->getPrice(); ?>
+                <li>
+                   <?php if ($_rate->getErrorMessage()): ?>
+                    <ul class="messages"><li class="error-msg"><ul><li><?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></li></ul></li></ul>
+                   <?php else: ?>
+                        <?php if ($_sole) : ?>
+                        <span class="no-display"><input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>" checked="checked" /></span>
+                        <?php else: ?>
+                          <input name="shipping_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio"/>
+                          <?php if ($_rate->getCode() === $this->getAddressShippingMethod()): ?>
+                            <script type="text/javascript">
+                                //<![CDATA[
+                                    lastPrice = <?php echo (float)$_rate->getPrice(); ?>;
+                                //]]>
+                            </script>
+                          <?php endif; ?>
+                        <?php endif; ?>
+                        <label for="s_method_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+                        <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                        <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+                        <?php echo $_excl; ?>
+                        <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                            (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                        <?php endif; ?>
+                        <?php if (stripos($_rate->getCode(),"itella_") !== false): ?>
+                            <img src = "<?php echo $this->getSkinUrl("css/itella/images/logo.png"); ?>" style= "width:60px; height:auto;float: right; display: inline;"/>
+                        <?php endif; ?>
+                        </label>
+                   <?php endif ?>
+                </li>
+                <?php if ($_rate->getCode() == "itella_PARCEL_TERMINAL"){ ?>
+                <li id = "itella-map" style = "display:none;">
+                  <input type = "hidden" name = "itella_pickup_point" id = "itella_pickup_point"/>
+                  <?php $obj = Mage::getModel('Itella_Shipping_Model_Carrier'); 
+                  $country = $this->getQuote()->getShippingAddress()->getCountry();
+                  $postcode = $this->getQuote()->getShippingAddress()->getData('postcode');
+                  $locs = $obj->getCode('terminal',$country);
+                  $quote_terminal = (int)trim($this->getQuote()->getItellaPickupPoint()); ?>
+                </li>
+                <?php } ?>
+            <?php endforeach; ?>
+            </ul>
+        </dd>
+    <?php endforeach; ?>
+    </dl>
+<script type="text/javascript">
+//<![CDATA[
+    <?php if (!empty($shippingCodePrice)): ?>
+        var shippingCodePrice = {<?php echo implode(',',$shippingCodePrice); ?>};
+    <?php endif; ?>
+   
+    $$('input[type="radio"][name="shipping_method"]').each(function(el){
+        Event.observe(el, 'click', function(){
+            if (el.checked == true) {
+                var getShippingCode = el.getValue();
+                <?php if (!empty($shippingCodePrice)): ?>
+                    var newPrice = shippingCodePrice[getShippingCode];
+                    if (!lastPrice) {
+                        lastPrice = newPrice;
+                        quoteBaseGrandTotal += newPrice;
+                    }
+                    if (newPrice != lastPrice) {
+                        quoteBaseGrandTotal += (newPrice-lastPrice);
+                        lastPrice = newPrice;
+                    }
+                <?php endif; ?>
+                checkQuoteBaseGrandTotal = quoteBaseGrandTotal;
+                return false;
+            }
+       });
+    });
+    var itella = '';
+    var itella_pickup_point = '';
+    jQuery('document').ready(function($){
+        if ($('#itella-map').length){
+            itella = new itellaMapping(document.getElementById('itella-map'));
+            itella
+              // set base url where images are placed
+              .setImagesUrl('<?php echo $this->getSkinUrl("css/itella/images/"); ?>')
+              // configure translation
+              .setStrings({
+                  modal_header: '<?php echo __('Pickup points'); ?>',
+                  selector_header: '<?php echo __('Pickup point'); ?>',
+                  workhours_header: '<?php echo __('Workhours'); ?>',
+                  contacts_header: '<?php echo __('Contacts'); ?>',
+                  search_placeholder: '<?php echo __('Enter postcode/address'); ?>',
+                  select_pickup_point: '<?php echo __('Select a pickup point'); ?>',
+                  no_pickup_points: '<?php echo __('No points to select'); ?>',
+                  select_btn: '<?php echo __('select'); ?>',
+                  back_to_list_btn: '<?php echo __('reset search'); ?>',
+                  nothing_found: '<?php echo __('Nothing found'); ?>',
+                  select_pickup_point_btn: '<?php echo __('Select pickup point'); ?>',
+                  no_information: '<?php echo __('No information'); ?>',
+                  error_leaflet: '<?php echo __('Leaflet is required for Itella-Mapping'); ?>',
+                  error_missing_mount_el: '<?php echo __('No mount supplied to itellaShipping'); ?>'
+              })
+              .init()
+              .setCountry('<?php echo $country; ?>')
+              // configure pickup points data (must adhere to pickup point data from itella-api)
+              .setLocations(<?php echo $locs;?>, true)
+              // to register function that does something when point is selected
+              .registerCallback(function (manual) {
+                /*
+                if (quote.shippingAddress().extensionAttributes == undefined) {
+                    quote.shippingAddress().extensionAttributes = {};
+                }
+                */
+                $('#itella_pickup_point').val(this.selectedPoint.pupCode);
+                
+              });
+        }
+    if ($('#s_method_itella_PARCEL_TERMINAL').prop('checked')){
+      $("#itella-map" ).show();
+      //$(".itella-parcel-terminal-list select").addClass('required-entry');
+    }
+    $("input[name='shipping_method']").on('click',function(){
+      if ($(this).attr('id')== "s_method_itella_PARCEL_TERMINAL"){
+        $("#itella-map" ).show();
+        //$(".itella-parcel-terminal-list select").addClass('required-entry');
+      } else {
+        $("#itella-map" ).hide();
+        //$(".itella-parcel-terminal-list select").removeClass('required-entry');
+      }
+    });
+    itella_pickup_point = $('#s_method_itella_PARCEL_TERMINAL');
+  });
+    
+    ShippingMethod.prototype.validate = ShippingMethod.prototype.validate.wrap(function(orig) {
+        if (itella_pickup_point.prop("checked") == true && itella.selectedPoint == null){
+            alert('<?php echo Mage::helper('itella_shipping')->__('Please select pickup point.');?>');
+            return false;
+        } 
+        return orig();
+    });
+    
+    
+//]]>
+</script>
+<?php endif; ?>

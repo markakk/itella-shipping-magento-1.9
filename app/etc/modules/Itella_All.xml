@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Itella_Shipping>
+      <active>true</active>
+      <codePool>local</codePool>
+      <depends>
+        <Mage_Shipping />
+      </depends>
+    </Itella_Shipping>
+  </modules>
+</config>

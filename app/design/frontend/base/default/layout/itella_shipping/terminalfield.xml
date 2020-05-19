@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<layout>
+    <checkout_onepage_index>
+        <reference name='checkout.onepage.shipping_method.available'>
+            <action method='setTemplate'><template>itella_shipping/checkout/onepage/shipping_method/available.phtml</template></action>
+        </reference>
+        <reference name="head">
+           <action method="addJs"><script>itella/leaflet.js</script></action>
+           <action method="addJs"><script>itella/itella-mapping.js</script></action>
+           <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
+           <action method="addCss"><stylesheet>css/itella/leaflet.css</stylesheet></action>
+        </reference>
+    </checkout_onepage_index>
+    <checkout_onepage_shippingmethod>
+        <reference name='root'>
+            <action method='setTemplate'><template>itella_shipping/checkout/onepage/shipping_method/available.phtml</template></action>
+        </reference>
+    </checkout_onepage_shippingmethod>
+    
+    <onestepcheckout_index_index>
+        <reference name="head">
+           <action method="addJs"><script>itella/leaflet.js</script></action>
+           <action method="addJs"><script>itella/itella-mapping.js</script></action>
+           <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
+           <action method="addCss"><stylesheet>css/itella/leaflet.css</stylesheet></action>
+        </reference>
+        <reference name='onestepcheckout_shipping_method'>
+            <action method='setTemplate'><template>itella_shipping/onestepcheckout/shipping_method.phtml</template></action>
+        </reference>
+    </onestepcheckout_index_index>
+    <onestepcheckout_onestepcheckout_shippingmethod>
+        <reference name='shippingmethod'>
+            <action method='setTemplate'><template>itella_shipping/onestepcheckout/shipping_method.phtml</template></action>
+        </reference>
+    </onestepcheckout_onestepcheckout_shippingmethod>
+    <onestepcheckout_index_saveaddressonestepcheckout>
+        <reference name='onestepcheckout_shipping_method'>
+            <action method='setTemplate'><template>itella_shipping/onestepcheckout/shipping_method.phtml</template></action>
+        </reference>
+    </onestepcheckout_index_saveaddressonestepcheckout>
+    
+</layout>
