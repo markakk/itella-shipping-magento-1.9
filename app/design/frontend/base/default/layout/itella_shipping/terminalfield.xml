@@ -5,10 +5,19 @@
             <action method='setTemplate'><template>itella_shipping/checkout/onepage/shipping_method/available.phtml</template></action>
         </reference>
         <reference name="head">
-           <action method="addJs"><script>itella/leaflet.js</script></action>
-           <action method="addJs"><script>itella/itella-mapping.js</script></action>
-           <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
-           <action method="addCss"><stylesheet>css/itella/leaflet.css</stylesheet></action>
+           <block type="core/text" name="itella-mapping-lib">
+               <action method="setText">
+                    <text><![CDATA[
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+                        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+                        ]]>
+                    </text>
+                </action>
+            </block>
+            <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
+            <action method="addJs"><script>itella/itella-mapping.js</script></action>
         </reference>
     </checkout_onepage_index>
     <checkout_onepage_shippingmethod>
@@ -19,10 +28,19 @@
     
     <onestepcheckout_index_index>
         <reference name="head">
-           <action method="addJs"><script>itella/leaflet.js</script></action>
-           <action method="addJs"><script>itella/itella-mapping.js</script></action>
-           <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
-           <action method="addCss"><stylesheet>css/itella/leaflet.css</stylesheet></action>
+           <block type="core/text" name="itella-mapping-lib">
+               <action method="setText">
+                    <text><![CDATA[
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+                        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+                        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+                        ]]>
+                    </text>
+                </action>
+            </block>
+            <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
+            <action method="addJs"><script>itella/itella-mapping.js</script></action>
         </reference>
         <reference name='onestepcheckout_shipping_method'>
             <action method='setTemplate'><template>itella_shipping/onestepcheckout/shipping_method.phtml</template></action>
