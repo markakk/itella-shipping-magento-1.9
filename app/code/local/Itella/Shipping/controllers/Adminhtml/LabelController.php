@@ -1,10 +1,10 @@
 <?php
-
+/*
 if (!class_exists('TCPDF')) {
     require_once Mage::getBaseDir() . '/lib/tecnickcom/tcpdf/tcpdf.php';
 }
 require_once Mage::getBaseDir() . '/lib/setasign/fpdi/src/autoload.php';
-
+*/
 class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controller_Action {
 
     /**
