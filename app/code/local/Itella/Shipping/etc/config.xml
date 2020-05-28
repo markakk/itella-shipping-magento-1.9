@@ -2,10 +2,15 @@
 <config>
     <modules>
         <Itella_Shipping>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Itella_Shipping>
     </modules>
     <global>
+        <blocks>
+            <itella_shipping>
+                <class>Itella_Shipping_Block</class>
+            </itella_shipping>
+        </blocks>
         <fieldsets>
             <sales_convert_quote>                           
                 <itella_pickup_point>

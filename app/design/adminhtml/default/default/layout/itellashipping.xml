@@ -16,6 +16,12 @@
                 <template>itella_shipping/sales/order/view/tab/info.phtml</template>
             </action>
         </reference>
+        <reference name="sales_order_tabs">
+            <action method="addTab">
+                <name>itella_shipping_order_view_tab</name>
+                <block>itella_shipping/adminhtml_order_view_tab_services</block>
+            </action>
+        </reference>
     </adminhtml_sales_order_view>
     <adminhtml_itellamanifest_index>
         <reference name="head">

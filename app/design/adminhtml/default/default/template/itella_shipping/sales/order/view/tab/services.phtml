@@ -1,0 +1,56 @@
+<?php $_order = $this->getOrder() ?>
+<?php $_orderServices = $_order->getItellaServices(); ?>
+<?php 
+    if ($_orderServices == null){
+        $_orderServices = array('services'=> array(), 'parcel_count' => '2');
+    } else {
+        $_orderServices = json_decode($_orderServices, true);
+    }
+?>
+<?php $_isItella = $this->isItellaMethod($_order) ?>
+<div id="order-messages">
+        <?php echo $this->getChildHtml('order_messages') ?>
+    </div>
+
+
+
+<section class="admin__page-section itella-tab-content">
+    <?php if ($_isItella && isset($_orderServices['services'])): ?>
+    
+    
+    <h3>
+        <span class="title"><?= /* @escapeNotVerified */ __('Itella courrier extra information') ?></span>
+    </h3>
+    <div class="admin__field">
+        <form id = "call-itella-form" action = "<?php echo $this->getUrl('adminhtml/services/saveservices');?>" method = "POST">
+        <input type = "hidden" name = "form_key" value = "<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>"/>
+        
+        <div class="order-itella-services-options" id = "itella_services_block">
+            <?php foreach ($this->getServices() as $id => $label): ?>
+            <div class="admin__field admin__field-option">
+                <input name="itella_services[]" type="checkbox" id="service-<?php echo $id; ?>" class="admin__control-checkbox" value="<?php echo $id; ?>" <?php echo (in_array($id,$_orderServices['services'])?'checked="checked"':'');?>>
+                <label class="admin__field-label" for="service-<?php echo $id; ?>"><?php echo $label; ?></label>
+            </div>
+            <?php endforeach; ?>
+            <input type = "number" min = "2" max  = "10" name = "parcel_count" placeholder = "Parcel count" value = "<?php echo (isset($_orderServices['parcel_count'])?$_orderServices['parcel_count']:'2'); ?>"/>
+            <input type="hidden" name="order_id" value="<?= /* @escapeNotVerified */ $_order->getId() ?>"/>
+        </div>
+        <br/>
+        <div class="order-itella-services-actions">
+        <button id="submit_manifest_labels" title="<?php echo $this->__('Save');?>" type="submit" class="scalable save">
+            <span><span><span><?php echo $this->__('Save');?></span></span></span>
+        </button> 
+        </div>
+        </form>
+    </div>
+    
+    
+    
+    <?php else: ?>
+    
+    <div class="admin__page-section-title">
+        <span class="title"><?= /* @escapeNotVerified */ __('Not Itella courrier service') ?></span>
+    </div>
+    
+    <?php endif; ?>
+</section>

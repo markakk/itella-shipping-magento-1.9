@@ -449,11 +449,13 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
 
 
                 $order_services = $request->getOrderShipment()->getOrder()->getItellaServices();
-                if ($order_services == null) {
-                    $order_services = array();
+                if ($order_services == null){
+                    $order_services = array('services'=> array(), 'parcel_count' => '');
                 } else {
-                    $order_services = json_decode($order_services);
+                    $order_services = json_decode($order_services, true);
                 }
+                $multi_parcel_count = $order_services['parcel_count'];
+                $order_services = $order_services['services'];
 
                 if ($this->_isCod($request) || in_array(3101, $order_services)) {
                     $service_cod = new \Mijora\Itella\Shipment\AdditionalService(
@@ -469,7 +471,7 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
                 }
                 if (in_array(3104, $order_services)) {
                     $service_fragile = new \Mijora\Itella\Shipment\AdditionalService(\Mijora\Itella\Shipment\AdditionalService::FRAGILE);
-                    $services[] = $service_cod;
+                    $services[] = $service_fragile;
                 }
                 if (in_array(3166, $order_services)) {
                     $service = new \Mijora\Itella\Shipment\AdditionalService(\Mijora\Itella\Shipment\AdditionalService::CALL_BEFORE_DELIVERY);
@@ -491,14 +493,31 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
         try {
             //$itemsShipment = $request->getPackageItems();
             $order_items = $request->getOrderShipment()->getOrder()->getAllItems();
-            
+            $total_weight = 0;
             foreach ($order_items as $order_item) {
-                //$order_item = new Varien_Object();
-                //$order_item->setData($itemShipment);
+                $total_weight += $order_item->getWeight() * $order_item->getQty();
+            }
+            $send_method = trim(str_ireplace('Itella_', '', $request->getShippingMethod()));
+            if ($send_method == "COURIER") {
+                $order_services = $request->getOrderShipment()->getOrder()->getItellaServices();
+                if ($order_services == null){
+                    $order_services = array('services'=> array(), 'parcel_count' => '');
+                } else {
+                    $order_services = json_decode($order_services, true);
+                }
+                $multi_parcel_count = $order_services['parcel_count'];
+                $order_services = $order_services['services'];
+                if (in_array(3102, $order_services) && $multi_parcel_count > 1 && $multi_parcel_count <=10) {
+                    for ($i=1;$i<=$multi_parcel_count;$i++){
+                        $item = new \Mijora\Itella\Shipment\GoodsItem();
+                        $item->setGrossWeight(round($total_weight/$multi_parcel_count,3));
+                        $items[] = $item;
+                    }
+                }
+                
+            } else {
                 $item = new \Mijora\Itella\Shipment\GoodsItem();
-                $item
-                        ->setGrossWeight($order_item->getWeight() * $order_item->getQty())       // kg, optional
-                        ->setContentDesc($order_item->getName());  // optional package content description
+                $item->setGrossWeight($total_weight);
                 $items[] = $item;
             }
         } catch (ItellaException $e) {
