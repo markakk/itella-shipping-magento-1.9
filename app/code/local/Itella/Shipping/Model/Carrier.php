@@ -513,8 +513,11 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
                         $item->setGrossWeight(round($total_weight/$multi_parcel_count,3));
                         $items[] = $item;
                     }
+                } else {
+                    $item = new \Mijora\Itella\Shipment\GoodsItem();
+                    $item->setGrossWeight($total_weight);
+                    $items[] = $item;
                 }
-                
             } else {
                 $item = new \Mijora\Itella\Shipment\GoodsItem();
                 $item->setGrossWeight($total_weight);
