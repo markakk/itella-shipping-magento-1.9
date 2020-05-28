@@ -121,17 +121,6 @@
                 </translations>
             </modules>
         </translate>
-        <events>
-          <adminhtml_widget_container_html_before>
-            <observers>
-              <unique-identifier>
-                <type>singleton</type>
-                <class>Itella_Shipping_Model_Observer</class>
-                <method>callItellaButton</method>
-              </unique-identifier>
-            </observers>
-          </adminhtml_widget_container_html_before>
-        </events>
     </adminhtml>
     <admin>
         <routers>

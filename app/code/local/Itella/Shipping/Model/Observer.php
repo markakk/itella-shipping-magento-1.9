@@ -25,7 +25,7 @@ class Itella_Shipping_Model_Observer
     if (get_class($block) == 'Mage_Adminhtml_Block_Widget_Grid_Massaction' && $block->getRequest()->getControllerName() == 'sales_order') {
       $block->addItem('itellashipment', array(
         'label' => Mage::helper('shipping')->__('Generate Itella labels'),
-        'url' => Mage::app()->getStore()->getUrl('itella_shipping/adminhtml_label/CreateShipment')
+        'url' => Mage::app()->getStore()->getUrl('itella_shipping/adminhtml_label/PrintLabels')
       ));
       $block->addItem('itellamanifest', array(
         'label' => Mage::helper('shipping')->__('Print Itella manifest'),
