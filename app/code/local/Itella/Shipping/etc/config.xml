@@ -52,6 +52,15 @@
                     </Itella_Shipping_Model_Observer>
                 </observers>
             </core_block_abstract_prepare_layout_before>
+            <adminhtml_sales_order_create_process_data_before>
+                <observers>
+                    <itella_pickup_point_observer>
+                        <type>singleton</type>
+                        <class>itella_shipping/observer</class>
+                        <method>editItellaPickupPoint</method>
+                    </itella_pickup_point_observer>
+                </observers>
+            </adminhtml_sales_order_create_process_data_before>
         </events>
         <models>
             <itella_shipping>

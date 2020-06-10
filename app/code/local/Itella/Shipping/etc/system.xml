@@ -44,6 +44,14 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </password_2317>
+                        <itella_contract_2317 translate="label comment">
+                            <label>Contract (2317 Product)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>18</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </itella_contract_2317>
                         <account_2711 translate="label comment">
                             <label>API user (2711 Product)</label>
                             <frontend_type>text</frontend_type>
@@ -60,6 +68,14 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </password_2711>
+                        <itella_contract_2711 translate="label comment">
+                            <label>Contract (2711 Product)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>19</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </itella_contract_2711>
                         <courier_email translate="label" >
                             <label>Courier email</label>
                             <frontend_type>text</frontend_type>

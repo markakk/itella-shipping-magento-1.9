@@ -172,11 +172,18 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
         $trackingNumbers = array();
         $info = $response->getInfo();
         foreach ($info as $inf) {
-            if (!empty($inf['tracking_number']) && !empty($inf['label_content'])) {
+            if (!empty($inf['tracking_number'])) {
+                if (is_array($inf['tracking_number'])) {
+                    $trackingNumbers = array_merge($inf['tracking_number'], $trackingNumbers);
+                } else {
+                    $trackingNumbers[] = $inf['tracking_number'];
+                }
+            }
+            if (!empty($inf['label_content'])) {
                 $labelsContent[] = $inf['label_content'];
-                $trackingNumbers = $inf['tracking_number'];
             }
         }
+        //var_dump($trackingNumbers); exit;
         $outputPdf = $this->_combineLabelsPdfZend($labelsContent);
         $shipment->setShippingLabel($outputPdf->render());
         $carrierCode = $carrier->getCarrierCode();
@@ -186,8 +193,8 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
                 $track->delete();
             }
             foreach ($trackingNumbers as $trackingNumber) {
-                $track = Mage::getModel('sales/order_shipment_track')->setNumber($trackingNumber)->setCarrierCode($carrierCode)->setTitle($carrierTitle);
-                $shipment->addTrack($track);
+                $track = Mage::getModel('sales/order_shipment_track')->setNumber((string)$trackingNumber)->setCarrierCode($carrierCode)->setTitle($carrierTitle);
+                $shipment->addTrack($track)->save();
             }
         } else {
             $text = 'Warning: Order ' . $shipment->getOrder()->getData('increment_id') . ' has not received tracking numbers.';
@@ -240,7 +247,7 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
             }
             foreach ($order->getShipmentsCollection() as $shipment) {
                 $pdf = $shipment->getShippingLabel();
-                if (!$pdf) {
+                if (!$pdf || empty($shipment->getAllTracks())) {
                     $label = $this->_createShippingLabel($shipment);
                 }
                 $pdf = $shipment->getShippingLabel();
@@ -328,6 +335,10 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
                 $order_table .= '<tr><td width = "40" align="right">' . $count . '.</td><td>' . $track_numer . '</td><td width = "60">' . date('Y-m-d') . '</td><td width = "40">1</td><td width = "60">' . $order->getWeight() . '</td><td width = "210">' . $client_address . $parcel_terminal_address . '</td></tr>';
             }
         }
+        if (count($items) === 0){
+            $this->_redirectReferer();
+            return;
+        }
         $translation = array(
             'sender_address' => __('Sender address'),
             'nr' => __('No.'),
@@ -341,7 +352,7 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
             'name_lastname_signature' => __('name, lastname, signature'),
         );
         
-        $name = $itella->getConfigData('cod_company');
+        $name = $itella->getConfigData('company');
         $phone = $itella->getConfigData('company_phone');
         $street = $itella->getConfigData('company_address');
         $postcode = $itella->getConfigData('company_postcode');

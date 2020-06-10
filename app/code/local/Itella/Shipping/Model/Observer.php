@@ -9,6 +9,15 @@ class Itella_Shipping_Model_Observer
     $quote->save();
   }
   
+  public function editItellaPickupPoint(Varien_Event_Observer $observer)
+  {
+    $order = $observer->getRequestModel()->getPost('order');
+    $quote = $observer->getSession()->getQuote();
+    $quote->setData('itella_pickup_point',isset($order['itella_pickup_point'])?$order['itella_pickup_point']:NULL);
+    $quote->save();
+  }
+  
+  
   public function saveItellaPickupPointToOrder(Varien_Event_Observer $observer)
   {
     $quote = $observer->getQuote();

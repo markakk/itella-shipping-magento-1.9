@@ -87,7 +87,7 @@
                     $locations = json_decode(file_get_contents($location_file), true);
                     foreach ($locations as $terminal) {
                         if (isset($terminal['pupCode']) && $terminal['pupCode'] == $terminal_id) {
-                            $parcel_terminal_address = '<br/><b>Pickup Point:</b> '.$terminal['locationName'].', '.$terminal['address']['postalCodeName'];
+                            $parcel_terminal_address = '<br/><b>Pickup Point:</b> '.$terminal['publicName'].', '.$terminal['address']['postalCodeName'];
                         }
                     }
                     

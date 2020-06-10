@@ -49,6 +49,18 @@ $counter = 0;
         echo $data;
       }
 ?>
+<div>
+<br/>
+  <div class="f-left">
+    <button id="submit_manifest_items2" title="<?php echo $this->__('Generate manifest');?>" type="button" class="scalable save">
+            <span><span><span><?php echo $this->__('Generate manifest');?></span></span></span>
+    </button>    
+    <button id="submit_manifest_labels2" title="<?php echo $this->__('Print labels');?>" type="button" class="scalable save">
+            <span><span><span><?php echo $this->__('Print labels');?></span></span></span>
+    </button>     
+  </div>
+  <div class="f-clear"></div>
+</div>
 <?php foreach ($grouped_items as $date=>$orders): ?>
 <?php
   $counter++;
@@ -71,6 +83,7 @@ $counter = 0;
       <th><span class="nobr"><span ><?php echo $this->__('Order #');?></span></span></th>
       <th><span class="nobr"><span ><?php echo $this->__('Order status');?></span></span></th>
       <th><span class="nobr"><span ><?php echo $this->__('Address');?></span></span></th>
+      <th><span class="nobr"><span ><?php echo $this->__('Tracking number'); ?></span></th>
       <th><span class="nobr"><span ><?php echo $this->__('Manifest generation date'); ?></span>
         <?php if ($date != "new"): ?>
         <button class="submit_call_itella" title="<?php echo $this->__('Call Itella');?>" type="button" class="scalable save" data-date = "<?php echo $date;?>">
@@ -93,6 +106,7 @@ $counter = 0;
             <th><?php echo $order->getIncrementId(); ?></th>
             <th><?php echo $order->getStatusLabel(); ?></th>
             <th><?php echo $helper->getItellaAddress($order); ?></th>
+            <th><?php echo $helper->getItellaTracking($order); ?></th>
             <th><?php echo $order->getManifestGenerationDate(); ?></th>
         </tr>
         <?php endforeach; ?>
@@ -125,7 +139,7 @@ $counter = 0;
 </div>
 <script>
 jQuery('document').ready(function($){
-  $('#submit_manifest_items').on('click',function(){
+  $('#submit_manifest_items, #submit_manifest_items2').on('click',function(){
     var ids = "";
     $('.hidden-ids').remove();
     $('.manifest-item:checked').each(function() {
@@ -143,7 +157,7 @@ jQuery('document').ready(function($){
     
   });
   
-  $('#submit_manifest_labels').on('click',function(){
+  $('#submit_manifest_labels, #submit_manifest_labels2').on('click',function(){
     var ids = "";
     $('.hidden-ids').remove();
     $('.manifest-item:checked').each(function() {

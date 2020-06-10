@@ -59,24 +59,28 @@
                         </label>
                         
                         <?php if ($_code == 'itella_PARCEL_TERMINAL'): ?>
-                        <?php if (isset($_POST['order']['parcel_terminal']) && $_POST['order']['parcel_terminal']) $this->getQuote()->setParcelTerminal((string) $_POST['order']['parcel_terminal'])->save(); ?>
+                        <?php if (isset($_POST['order']['itella_pickup_point']) && $_POST['order']['itella_pickup_point']) $this->getQuote()->setItellaPickupPoint((string) $_POST['order']['itella_pickup_point'])->save(); ?>
                         <?php $obj = Mage::getModel('Itella_Shipping_Model_Carrier'); 
-                
-                        $locs = $obj->getCode('terminal'); ?>
-                        <?php $quote_terminal = (int)trim($this->getQuote()->getParcelTerminal()); ?>
-                        <select name = "order[parcel_terminal]" <?php echo (!$this->isMethodActive($_code)?'style="display:none;"':'');?> id = "itella_parcel_terminal_list" onchange="order.setParcelTerminal(this.value)" style = "width:100%">
-                          <option value = ""><?php echo Mage::helper('itella_shipping')->__('Select parcel terminal'); ?></option>
+                        //echo $this->getOrder().'a';
+                        $locs = json_decode($obj->getCode('terminal'), true); ?>
+                        <?php $quote_terminal = (int)trim($this->getQuote()->getItellaPickupPoint()); ?>
+                        <select name = "order[itella_pickup_point]" <?php echo (!$this->isMethodActive($_code)?'style="display:none;"':'');?> id = "itella_parcel_terminal_list" onchange="order.setParcelTerminal(this.value)" style = "width:100%">
+                          <option value = ""><?php echo Mage::helper('itella_shipping')->__('Select pickup point'); ?></option>
                           <?php
                           $grouped_options = array();
-                          foreach ($locs as $key=>$loc){
-                            if (!isset($grouped_options[$loc['city']]))
-                              $grouped_options[$loc['city']] = array();
-                            $grouped_options[(string)$loc['city']][(string)$key] = $loc;
-                          }
+                          
+                          foreach ($locs as $loc){
+                            $key = $loc['pupCode'];
+                            if (!isset($grouped_options[$loc['address']['municipality']]))
+                              $grouped_options[$loc['address']['municipality']] = array();
+                            $grouped_options[(string)$loc['address']['municipality']][(string)$key] = $loc;
+                            
+                         }
+                         ksort($grouped_options);
                           foreach ($grouped_options as $city=>$locs){
                             echo '<optgroup label = "'.$city.'">';
                             foreach ($locs as $key=>$loc){
-                              echo '<option value = "'.$key.'" '.($key == $quote_terminal?'selected':'').'>'.$loc['name'].'</option>';
+                              echo '<option value = "'.$key.'" '.($key == $quote_terminal?'selected':'').'>'.$loc['publicName'].', '. $loc['address']['address'] .'</option>';
                             }
                             echo '</optgroup>';
                           }
@@ -128,10 +132,10 @@
 order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 
-  AdminOrder.prototype.setParcelTerminal  = function(method) {
+  AdminOrder.prototype.setParcelTerminal  = function(pickup_point) {
       var data = {};
       data['order[shipping_method]'] = 'itella_PARCEL_TERMINAL';
-      data['order[parcel_terminal]'] = method;
+      data['order[itella_pickup_point]'] = pickup_point;
       this.loadArea(['shipping_method', 'totals', 'billing_method'], true, data);
     };
 
