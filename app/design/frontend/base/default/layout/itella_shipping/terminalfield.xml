@@ -17,6 +17,7 @@
                 </action>
             </block>
             <action method="addCss"><stylesheet>css/itella/itella-mapping.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/itella/custom.css</stylesheet></action>
             <action method="addJs"><script>itella/itella-mapping.js</script></action>
         </reference>
     </checkout_onepage_index>
