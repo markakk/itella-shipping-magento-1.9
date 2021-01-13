@@ -33,11 +33,11 @@ class Itella_Shipping_Model_Observer
     $block = $observer->getEvent()->getBlock();
     if (get_class($block) == 'Mage_Adminhtml_Block_Widget_Grid_Massaction' && $block->getRequest()->getControllerName() == 'sales_order') {
       $block->addItem('itellashipment', array(
-        'label' => Mage::helper('shipping')->__('Generate Itella labels'),
+        'label' => Mage::helper('shipping')->__('Generate Smartpost labels'),
         'url' => Mage::app()->getStore()->getUrl('itella_shipping/adminhtml_label/PrintLabels')
       ));
       $block->addItem('itellamanifest', array(
-        'label' => Mage::helper('shipping')->__('Print Itella manifest'),
+        'label' => Mage::helper('shipping')->__('Print Smartpost manifest'),
         'url' => Mage::app()->getStore()->getUrl('itella_shipping/adminhtml_label/CreateManifest')
       ));
     }
@@ -47,7 +47,7 @@ class Itella_Shipping_Model_Observer
         $container = $observer->getBlock();
         if(null !== $container && $container->getType() == 'adminhtml/sales_order') {
             $data = array(
-                'label'     => Mage::helper('shipping')->__('Call Itella'),
+                'label'     => Mage::helper('shipping')->__('Call Smartpost'),
                 'class'     => '',
                 'onclick'   => "callItella('".Mage::helper("adminhtml")->getUrl('itella_shipping/adminhtml_label/CallItella')."')",
             );

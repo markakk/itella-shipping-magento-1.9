@@ -9,7 +9,7 @@ class Itella_Shipping_Adminhtml_ItellamanifestController extends Mage_Adminhtml_
     
     public function indexAction()
     {
-        $this->loadLayout()->_setActiveMenu('sales')->_title($this->__('Itella manifest'));; 
+        $this->loadLayout()->_setActiveMenu('sales')->_title($this->__('Smartpost manifest'));; 
         $this->renderLayout();
     }
 }

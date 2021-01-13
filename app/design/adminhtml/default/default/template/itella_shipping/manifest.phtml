@@ -3,7 +3,7 @@
                 ->addFieldToFilter('shipping_method',array('like' => 'itella_%'))
                 ->addFieldToFilter('state',array('neq' => 'canceled'));                ?>
 <div class="page-title">
-    <h1><?php echo $this->__('Itella orders') ?></h1>
+    <h1><?php echo $this->__('Smartpost orders') ?></h1>
 </div>
 <?php echo $this->getChildHtml('info');?>
 <?php echo $this->getPagerHtml(); ?>
@@ -86,8 +86,8 @@ $counter = 0;
       <th><span class="nobr"><span ><?php echo $this->__('Tracking number'); ?></span></th>
       <th><span class="nobr"><span ><?php echo $this->__('Manifest generation date'); ?></span>
         <?php if ($date != "new"): ?>
-        <button class="submit_call_itella" title="<?php echo $this->__('Call Itella');?>" type="button" class="scalable save" data-date = "<?php echo $date;?>">
-            <span><span><span><?php echo $this->__('Call Itella');?></span></span></span>
+        <button class="submit_call_itella" title="<?php echo $this->__('Call Smartpost');?>" type="button" class="scalable save" data-date = "<?php echo $date;?>">
+            <span><span><span><?php echo $this->__('Call Smartpost');?></span></span></span>
         </button>
         <?php endif; ?>
         </span>
