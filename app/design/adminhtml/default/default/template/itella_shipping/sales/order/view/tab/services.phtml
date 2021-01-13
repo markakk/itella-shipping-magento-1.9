@@ -12,14 +12,11 @@
         <?php echo $this->getChildHtml('order_messages') ?>
     </div>
 
-
-
 <section class="admin__page-section itella-tab-content">
     <?php if ($_isItella && isset($_orderServices['services'])): ?>
     
-    
     <h3>
-        <span class="title"><?= /* @escapeNotVerified */ __('Itella courrier extra information') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Smartpost courrier extra information') ?></span>
     </h3>
     <div class="admin__field">
         <form id = "call-itella-form" action = "<?php echo $this->getUrl('adminhtml/services/saveservices');?>" method = "POST">
@@ -44,12 +41,10 @@
         </form>
     </div>
     
-    
-    
     <?php else: ?>
     
     <div class="admin__page-section-title">
-        <span class="title"><?= /* @escapeNotVerified */ __('Not Itella courrier service') ?></span>
+        <span class="title"><?= /* @escapeNotVerified */ __('Not Smartpost courrier service') ?></span>
     </div>
     
     <?php endif; ?>

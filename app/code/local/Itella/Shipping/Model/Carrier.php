@@ -201,8 +201,8 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
     public function getCode($type, $code = '') {
         $codes = array(
             'method' => array(
-                'COURIER' => __('Itella courier'),
-                'PARCEL_TERMINAL' => __('Itella pickup point')
+                'COURIER' => __('Smartpost courier'),
+                'PARCEL_TERMINAL' => __('Smartpost pickup point')
             ),
             'unit_of_measure' => array(
                 'LB' => __('Pounds'),

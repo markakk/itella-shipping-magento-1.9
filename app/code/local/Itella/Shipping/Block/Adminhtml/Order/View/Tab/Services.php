@@ -9,11 +9,11 @@ class Itella_Shipping_Block_Adminhtml_Order_View_Tab_Services extends Mage_Admin
     }
 
     public function getTabLabel() {
-        return $this->__('Itella services');
+        return $this->__('Smartpost services');
     }
 
     public function getTabTitle() {
-        return $this->__('Itella services');
+        return $this->__('Smartpost services');
     }
 
     public function canShowTab() {

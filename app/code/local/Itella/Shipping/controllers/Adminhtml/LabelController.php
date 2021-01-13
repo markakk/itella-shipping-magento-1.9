@@ -24,7 +24,7 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
             $pack_no = array();
             $order = Mage::getModel('sales/order')->load($order_id); //Load order
             if (!Mage::helper('itella_shipping/data')->isItellaMethod($order)) {
-                $text = 'Warning: Order ' . $order->getData('increment_id') . ' not Itella shipping method.';
+                $text = 'Warning: Order ' . $order->getData('increment_id') . ' not Smartpost shipping method.';
                 Mage::getSingleton('adminhtml/session')->addWarning($text);
                 continue;
             }
@@ -113,7 +113,7 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
             $shipment->save();
 
             //$order->setIsInProcess(true);
-            $order->addStatusHistoryComment('Automatically SHIPPED by Itella mass action.', false);
+            $order->addStatusHistoryComment('Automatically SHIPPED by Smartpost mass action.', false);
             $order->save();
         } else {
             Mage::getSingleton('adminhtml/session')->addWarning('Warning: Order ' . $orderIncrementId . ' is empty or cannot be shipped or has been shipped already');
@@ -389,10 +389,10 @@ class Itella_Shipping_Adminhtml_LabelController extends Mage_Adminhtml_Controlle
         $itella = Mage::getSingleton('Itella_Shipping_Model_Carrier');
         $result = $itella->call_itella($date);
         if ($result) {
-            $text = $this->__('Itella courier called');
+            $text = $this->__('Smartpost courier called');
             Mage::getSingleton('adminhtml/session')->addSuccess($text);
         } else {
-            $text = $this->__('Failed to call Itella courier');
+            $text = $this->__('Failed to call Smartpost courier');
             Mage::getSingleton('adminhtml/session')->addWarning($text);
         }
         $this->_redirectReferer();

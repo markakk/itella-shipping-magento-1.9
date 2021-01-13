@@ -4,7 +4,7 @@
         <sales>    
             <children>
                 <itella_shipping module="itella_shipping" translate="title">
-                    <title>Itella shipping</title>
+                    <title>Smartpost shipping</title>
                     <sort_order>35</sort_order>
                     <action>adminhtml/itellamanifest</action>
                 </itella_shipping>
