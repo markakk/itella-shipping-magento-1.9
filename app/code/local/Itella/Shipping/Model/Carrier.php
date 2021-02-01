@@ -346,7 +346,17 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
                 ->setToString(true)
                 ->setBase64(true)
                 ->printManifest('manifest.pdf');
-                
+        
+        $items_fix = array();
+        foreach ($items as $item) {
+          $items_fix[] = array(
+            'tracking_number' => $item['track_num'],
+            'weight' => $item['weight'],
+            'amount' => 1,
+            'delivery_address' => $item['delivery_address']
+          );
+        }
+
         try {
             $caller = new \Mijora\Itella\CallCourier($sendTo);
             $result = $caller
@@ -354,11 +364,15 @@ class Itella_Shipping_Model_Carrier extends Mage_Usa_Model_Shipping_Carrier_Abst
                     ->setSubject('E-com order booking')
                     ->setPickUpAddress(array(
                         'sender' => $this->getConfigData('cod_company'),
-                        'address' => $this->getConfigData('company_address') . ', ' . $this->getConfigData('company_postcode') . ', ' . $this->getConfigData('company_city') . ', ' . $this->getConfigData('company_countrycode'),
+                        'address_1' => $this->getConfigData('company_address'),
+                        'postcode' => $this->getConfigData('company_postcode'),
+                        'city' => $this->getConfigData('company_city'),
+                        'country' => $this->getConfigData('company_countrycode'),
                         'pickup_time' => '8:00 - 17:00',
                         'contact_phone' => $this->getConfigData('company_phone'),
                     ))
                     ->setAttachment($manifest_pdf, true)
+                    ->setItems($items_fix)
                     ->callCourier();
             if ($result) {
                 return true;

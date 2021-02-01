@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Itella_Shipping>
-            <version>1.2.3</version>
+            <version>1.2.5</version>
         </Itella_Shipping>
     </modules>
     <global>
